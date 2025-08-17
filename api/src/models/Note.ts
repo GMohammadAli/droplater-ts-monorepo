@@ -19,37 +19,38 @@ export interface NoteDocument extends Document {
 
 const attemptSchema = new Schema<Attempt>(
     {
-        at: {type: Date, required: true},
-        statusCode: {type: Number, required: true},
-        ok: {type: Boolean, required: true},
-        error: {type: String}
+        at: { type: Date, required: true },
+        statusCode: { type: Number, required: true },
+        ok: { type: Boolean, required: true },
+        error: { type: String }
     },
-    {_id: false}
-)
+    { _id: false }
+);
 
 const noteSchema = new Schema<NoteDocument>(
     {
-        title: { type: String, required: true},
-        body: { type: String, required: true},
-        releaseAt: { type: Date, required: true},
-        webhookUrl: {type: String, required: true},
+        title: { type: String, required: true },
+        body: { type: String, required: true },
+        releaseAt: { type: Date, required: true },
+        webhookUrl: { type: String, required: true },
         status: {
             type: String,
-            enum: ["pending","delivered","failed","dead"],
+            enum: ["pending", "delivered", "failed", "dead"],
             default: "pending"
         },
         attempts: {
-            type: [attemptSchema], default: []
+            type: [attemptSchema],
+            default: []
         },
-        deliveredAt: { type: Date, default: null}
+        deliveredAt: { type: Date, default: null }
     },
     {
         timestamps: true
     }
-)
+);
 
 //Indexes for efficient search, ascending order indexes
-noteSchema.index({ releaseAt: 1});
-noteSchema.index({status: 1})
+noteSchema.index({ releaseAt: 1 });
+noteSchema.index({ status: 1 });
 
 export const Note = model<NoteDocument>("Note", noteSchema);
