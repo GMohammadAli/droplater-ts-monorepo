@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app/api
+    command: npm run dev
+    volumes:
+      - ./api:/usr/src/app/api
+    ports:
+      - "3000:3000"
+    env_file: .env
+    depends_on:
+      - mongo
+      - redis
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app/worker
+    command: npm run dev
+    volumes:
+      - ./worker:/usr/src/app/worker
+    env_file: .env
+    depends_on:
+      - redis
+
+  sink:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app/sink
+    command: npm run dev
+    volumes:
+      - ./sink:/usr/src/app/sink
+    ports:
+      - "4000:4000"
+    env_file: .env
+
+  mongo:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+  
+volumes:
+  mongo-data:
