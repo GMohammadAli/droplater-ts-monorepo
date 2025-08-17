@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node"]
+  }
+  //Issue -> have to write exclude, include and compilerOptions again,
+  // vs-code error, debugging required
+  //let's try to resolve this issue later on
+}
