@@ -50,8 +50,8 @@ export const getPaginatedNotes = async (req: Request, res: Response) => {
       });
     }
 
-    const reqParams: FetchPaginatedNotesInput = parsed.data;
-    const { page, status } = reqParams;
+    const reqQuery: FetchPaginatedNotesInput = parsed.data;
+    const { page, status } = reqQuery;
     const notesPerPage = DEFAULT_NOTES_PER_PAGE;
 
     const skip = (page - 1) * notesPerPage;

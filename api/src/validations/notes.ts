@@ -30,7 +30,14 @@ export const createNoteSchema = z.object({
 
 export const fetchPaginatedNotesSchema = z.object({
   status: z.enum(["pending", "delivered", "failed", "dead"]).default("pending"),
-  page: z.number().min(1, "Invalid Page Number"),
+  page: z.preprocess(
+    (val) => {
+      if (typeof val === "string") return parseInt(val, 10);
+      if (typeof val === "number") return val;
+      return 1; // default fallback
+    },
+    z.number().min(1, "Invalid Page Number")
+  ),
 });
 
 export const replayNoteSchema = z.object({
