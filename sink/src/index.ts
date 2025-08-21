@@ -1,18 +1,61 @@
 import dotenv from "dotenv";
 import express from "express";
 import pino from "pino";
+import Redis from "ioredis";
 
 dotenv.config();
 const PORT = process.env.SINK_PORT || 4000;
+const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 
-const logger = pino();
+const redis = new Redis(REDIS_URL);
+
+const logger = pino({
+  level: "debug",
+});
 const app = express();
 
 app.use(express.json());
 
-app.post("/webhook", (req, res) => {
-  logger.info("Webhook received: %o", req.body);
-  res.status(200).send("ok");
+app.get("/sink/health", (_, res) => res.json({ ok: true }));
+
+app.post("/sink/webhook", async (req, res) => {
+  const idempotencyKey = req.header("X-Idempotency-Key");
+
+  if (!idempotencyKey) {
+    return res.status(400).json({
+      error: "Missing X-Idempotency-Key header",
+    });
+  }
+
+  try {
+    //SETNX key 1 EX 86400: Set if not exists, expire in 1 day
+    const isAlreadySet = await redis.set(
+      idempotencyKey,
+      "1",
+      "EX",
+      86400,
+      "NX"
+    );
+
+    if (!isAlreadySet) {
+      // Already processed — idempotency hit
+      logger.info(`[SINK] Duplicate delivery ignored. Key=${idempotencyKey}`);
+      return res.status(200).json({
+        isDuplicate: true,
+        message: "Duplicate Entry",
+      });
+    }
+
+    logger.info(`[SINK] New delivery:`, req.body);
+
+    return res.status(200).json({
+      isDuplicate: false,
+      message: "First time hit",
+    });
+  } catch (error: any) {
+    logger.error("[SINK] Redis error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.listen(PORT, () => {

@@ -11,7 +11,8 @@ const logger = pino();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGO_DB_URL = process.env.MONGO_DB_URL || "mongodb://localhost:27017/";
+const MONGO_DB_URL =
+  process.env.MONGO_DB_URL || "mongodb://localhost:27017/note-delivery-service";
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 
 app.use(express.json());
@@ -33,7 +34,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-app.get("/health", (_, res) => res.json({ ok: true }));
+app.get("/api/health", (_, res) => res.json({ ok: true }));
 
 app.use("/api/notes", notesRouter);
 

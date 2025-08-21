@@ -42,7 +42,8 @@ export const createNote = async (req: Request, res: Response) => {
 
 export const getPaginatedNotes = async (req: Request, res: Response) => {
   try {
-    const parsed = fetchPaginatedNotesSchema.safeParse(req.params);
+    logger.debug("Req query received: %o", req.query);
+    const parsed = fetchPaginatedNotesSchema.safeParse(req.query);
 
     if (!parsed.success) {
       return res.status(400).json({
@@ -63,6 +64,8 @@ export const getPaginatedNotes = async (req: Request, res: Response) => {
       .limit(notesPerPage);
 
     const total = await Note.countDocuments(filter);
+
+    logger.debug(`Total Notes found are ${total}`);
 
     res.status(200).json({
       data: notes,

@@ -35,7 +35,6 @@ const noteQueue = new Queue("note-delivery", {
 
 const pollDueNotes = async () => {
   const dueNotes: Array<NoteDocument> = await getDueNotes();
-  console.log({ dueNotes });
   logger.info(`No. of Due Notes ${dueNotes.length || 0}`);
   for (const note of dueNotes) {
     await noteQueue.add(
