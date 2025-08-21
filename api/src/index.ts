@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import pino from "pino";
 import notesRouter from "./routes/notes";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
 
 dotenv.config();
 const logger = pino({
@@ -16,6 +17,15 @@ const PORT = process.env.PORT || 3000;
 const MONGO_DB_URL =
   process.env.MONGO_DB_URL || "mongodb://localhost:27017/note-delivery-service";
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
+
+// allow only frontend, as deployment is not in scope
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(express.json());
 
