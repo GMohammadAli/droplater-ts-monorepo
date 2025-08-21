@@ -9,8 +9,12 @@ import {
   replayNoteSchema,
 } from "../validations/notes";
 import { Note, NoteDocument } from "../models/Note";
+import dotenv from "dotenv";
 
-const logger = pino();
+dotenv.config();
+const logger = pino({
+  level: process.env.LOG_LEVEL || "debug",
+});
 const DEFAULT_NOTES_PER_PAGE = 20;
 
 export const createNote = async (req: Request, res: Response) => {

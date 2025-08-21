@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 
 dotenv.config();
 const logger = pino({
-  level: "info",
+  level: process.env.LOG_LEVEL || "debug",
 });
 
 const MONGO_DB_URL = process.env.MONGO_DB_URL || "mongodb://localhost:27017/";

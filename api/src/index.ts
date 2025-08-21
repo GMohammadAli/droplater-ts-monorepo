@@ -7,7 +7,9 @@ import notesRouter from "./routes/notes";
 import rateLimit from "express-rate-limit";
 
 dotenv.config();
-const logger = pino();
+const logger = pino({
+  level: process.env.LOG_LEVEL || "debug",
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;

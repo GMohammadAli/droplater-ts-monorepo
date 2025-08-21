@@ -10,7 +10,7 @@ const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 const redis = new Redis(REDIS_URL);
 
 const logger = pino({
-  level: "debug",
+  level: process.env.LOG_LEVEL || "debug",
 });
 const app = express();
 
