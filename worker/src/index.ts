@@ -20,13 +20,10 @@ mongoose
   .then(() => logger.info("Mongo DB Connected"))
   .catch((error) => logger.error(error));
 
-const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
-
 const redis = new Redis({
   host: process.env.REDIS_HOST || "localhost",
   port: Number(process.env.REDIS_PORT) || 6379,
   maxRetriesPerRequest: null,
-  // other options as needed, e.g. password
 });
 
 const noteQueue = new Queue("note-delivery", {
