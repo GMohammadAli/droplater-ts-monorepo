@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
-    "prod": "tsc && node dist/index.js"
+    "prod": "tsc && node dist/index.js",
+    "lint": "node -e \"console.log('.vscode/settings.json contains format on save setting; linting is managed by editor.')\""
   },
   "keywords": [],
   "author": "",

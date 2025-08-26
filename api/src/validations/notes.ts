@@ -29,7 +29,9 @@ export const createNoteSchema = z.object({
 });
 
 export const fetchPaginatedNotesSchema = z.object({
-  status: z.enum(["pending", "delivered", "failed", "dead"]).default("pending"),
+  status: z
+    .enum(["pending", "delivered", "failed", "dead", "all"])
+    .default("pending"),
   page: z.preprocess(
     (val) => {
       if (typeof val === "string") return parseInt(val, 10);

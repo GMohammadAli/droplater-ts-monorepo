@@ -60,7 +60,7 @@ export const getPaginatedNotes = async (req: Request, res: Response) => {
     const notesPerPage = DEFAULT_NOTES_PER_PAGE;
 
     const skip = (page - 1) * notesPerPage;
-    const filter = { status };
+    const filter = status === "all" ? {} : { status };
 
     const notes: Array<NoteDocument> = await Note.find(filter)
       .sort({ releaseAt: 1 })
