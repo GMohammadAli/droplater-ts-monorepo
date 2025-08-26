@@ -1,0 +1,134 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  --base-color: #c8b8db;
+  --primary-color: #502f4c;
+  --secondary-color: #70587c;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.primary {
+  color: var(--primary-color);
+}
+
+.table-wrapper {
+  /* color: var(--primary-color); */
+  /* border-radius: 12px; */
+  padding: 0.5rem 0.2rem;
+  width: 100%;
+  /* border: 1px solid black; */
+
+  thead {
+    background-color: var(--base-color);
+  }
+
+  th {
+    padding: 0.5rem 0.2rem;
+    /* color: var(--primary-color);
+    background-color: var(--base-color); */
+    border: 1px solid black;
+    border-radius: 6px;
+  }
+
+  td {
+    padding: 0.5rem 0.2rem;
+    border: 1px solid black;
+    border-radius: 6px;
+  }
+
+  tr {
+    border: 1px solid black;
+  }
+}
+
+button {
+  padding: 1rem;
+  /* width: 8rem; */
+  background-color: var(--primary-color);
+  color: var(--base-color);
+  border-radius: 16px;
+  border: none;
+  max-height: 3.5rem;
+}
+
+form {
+  display: flex;
+  margin: 1rem;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 1rem;
+  min-height: 2rem;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 12rem;
+    flex-grow: 1;
+
+    input {
+      border-radius: 12px;
+      padding: 1rem 0.4rem;
+    }
+
+    textarea {
+      border-radius: 12px;
+      padding: 1rem 0.4rem;
+    }
+  }
+
+  .textarea-wrapper {
+    flex-grow: 3;
+  }
+}
+
+.filter-wrapper {
+  margin-block: 1rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#statusFilter {
+  border: 1px solid black;
+  border-radius: 12px;
+  width: 8rem;
+  min-height: 2rem;
+  padding: 0.5rem;
+}
+
+.table-section {
+  border: 1px solid black;
+  padding: 1rem 0.4rem;
+  border-radius: 1rem;
+}
+
+.table-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-block: 1rem;
+  border: none !important;
+  flex-direction: column;
+
+  > div {
+    width: 100%;
+  }
+
+  .pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+}
