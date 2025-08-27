@@ -6,6 +6,7 @@ import Redis from "ioredis";
 dotenv.config();
 const PORT = process.env.SINK_PORT || 4000;
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
+const RETURN_ERROR = process.env.RETURN_ERROR || true;
 
 const redis = new Redis(REDIS_URL);
 
@@ -19,6 +20,12 @@ app.use(express.json());
 app.get("/sink/health", (_, res) => res.json({ ok: true }));
 
 app.post("/sink/webhook", async (req, res) => {
+  if (RETURN_ERROR) {
+    return res.status(500).json({
+      error: "Simulated 500 Status",
+    });
+  }
+
   const idempotencyKey = req.header("X-Idempotency-Key");
 
   if (!idempotencyKey) {
