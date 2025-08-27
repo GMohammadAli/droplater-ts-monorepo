@@ -25,7 +25,7 @@ async function seed() {
       title: `System Alert #${i + 1}`,
       body: "CPU usage is above threshold.",
       releaseAt: new Date(), // current date/time
-      webhookUrl: "http://localhost:4000/sink/webhook",
+      webhookUrl: "http://sink:4000/sink/webhook",
       status: "pending",
       attempts: [],
       deliveredAt: new Date("2025-08-26T11:34:53.066Z"),

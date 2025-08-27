@@ -37,7 +37,7 @@ const pollDueNotes = async () => {
     await noteQueue.add(
       "deliver-note",
       {
-        noteId: note.id,
+        noteId: note._id,
       },
       { removeOnComplete: true, removeOnFail: false }
     );
@@ -56,10 +56,9 @@ const worker = new Worker(
     const note = await Note.findById(job.data.noteId);
     if (!note) throw new Error("Note not found");
 
-    const idKey = getIdempotentKey(
-      note.id.toString(),
-      note.releaseAt.toString()
-    );
+    const noteId = job.data.noteId;
+
+    const idKey = getIdempotentKey(noteId, note.releaseAt.toString());
 
     let attemptNumber = note.attempts?.length || 0;
 
@@ -73,7 +72,7 @@ const worker = new Worker(
         },
         {
           headers: {
-            "X-Note-Id": note.id.toString(),
+            "X-Note-Id": noteId,
             "X-Idempotency-Key": idKey,
           },
           timeout: 5000,
@@ -88,7 +87,7 @@ const worker = new Worker(
           statusCode: resp.status,
           ok: true,
         });
-        logger.debug("Note Delivered sucessfully:", note.id);
+        logger.debug("Note Delivered successfully: %s", noteId);
         await note.save();
       } else {
         throw new Error(`Bad status: ${resp.status}`);
@@ -102,13 +101,13 @@ const worker = new Worker(
         error: error.message,
       });
       logger.debug(
-        `Note Delivery failed for ${attemptNumber} attempt:`,
-        note.id
+        `Note Delivery failed for ${attemptNumber} attempt: %s`,
+        noteId
       );
       if (attemptNumber < MAX_ATTEMPTS) {
         const delay = BACKOFF_DELAYS_MS[Math.min(attemptNumber - 1, 2)];
-        logger.debug(`Note Enqueued again for retry attempt:`, note.id);
-        await noteQueue.add("deliver-note", { noteId: note.id }, { delay });
+        logger.debug(`Note Enqueued again for retry attempt: %s`, noteId);
+        await noteQueue.add("deliver-note", { noteId: noteId }, { delay });
       } else {
         note.status = "dead";
       }

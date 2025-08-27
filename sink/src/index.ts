@@ -6,7 +6,7 @@ import Redis from "ioredis";
 dotenv.config();
 const PORT = process.env.SINK_PORT || 4000;
 const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
-const RETURN_ERROR = process.env.RETURN_ERROR || true;
+const SINK_RETURN_ERROR = process.env.SINK_RETURN_ERROR === "true";
 
 const redis = new Redis(REDIS_URL);
 
@@ -20,9 +20,9 @@ app.use(express.json());
 app.get("/sink/health", (_, res) => res.json({ ok: true }));
 
 app.post("/sink/webhook", async (req, res) => {
-  if (RETURN_ERROR) {
+  if (SINK_RETURN_ERROR) {
     return res.status(500).json({
-      error: "Simulated 500 Status",
+      message: "Simulated 500 Status",
     });
   }
 
@@ -30,7 +30,7 @@ app.post("/sink/webhook", async (req, res) => {
 
   if (!idempotencyKey) {
     return res.status(400).json({
-      error: "Missing X-Idempotency-Key header",
+      message: "Missing X-Idempotency-Key header",
     });
   }
 
@@ -53,14 +53,14 @@ app.post("/sink/webhook", async (req, res) => {
       });
     }
 
-    logger.info(`[SINK] New delivery:`, req.body);
+    logger.info(`[SINK] New delivery: %o`, req.body);
 
     return res.status(200).json({
       isDuplicate: false,
       message: "First time hit",
     });
   } catch (error: any) {
-    logger.error("[SINK] Redis error:", error);
+    logger.error("[SINK] Redis error: %o", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });

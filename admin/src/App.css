@@ -50,7 +50,7 @@ button {
   padding: 1rem;
   /* width: 8rem; */
   background-color: var(--primary-color);
-  color: var(--base-color);
+  color: white;
   border-radius: 16px;
   border: none;
   max-height: 3.5rem;

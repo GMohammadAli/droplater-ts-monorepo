@@ -48,8 +48,8 @@ export default function App() {
       const res = await api.get(
         `/notes?status=${statusFilter}&page=${pageIndex + 1}`
       );
-      setNotes(res.data.data);
-      setTotalPages(res.data.totalPages);
+      setNotes(res.data?.data);
+      setTotalPages(res.data.pagination?.totalPages);
       setDeliveredIds([]);
     } catch (error) {
       console.log({ error });
@@ -305,7 +305,7 @@ type CreateNoteFormType = {
 function CreateNoteForm({ onCreate }: CreateNoteFormType) {
   const { register, handleSubmit } = useForm<NoteInput>();
 
-  const defaultWebhookUrl = "http://localhost:4000/sink/webhook";
+  const defaultWebhookUrl = "http://sink:4000/sink/webhook";
 
   const onSubmit: SubmitHandler<NoteInput> = async (data) => {
     await onCreate(data);
