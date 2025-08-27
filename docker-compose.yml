@@ -1,12 +1,10 @@
+version: "3.9"
+
 services:
   api:
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile
-    working_dir: /usr/src/app/api
-    command: npm run dev
-    volumes:
-      - ./api:/usr/src/app/api
     ports:
       - "3000:3000"
     env_file: .env
@@ -14,29 +12,40 @@ services:
       - mongo
       - redis
 
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"   # Vite dev server
+    volumes:
+      - ./admin:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev -- --host 0.0.0.0
+    depends_on:
+      - api
+
   worker:
     build:
-      context: .
+      context: ./worker
       dockerfile: Dockerfile
-    working_dir: /usr/src/app/worker
-    command: npm run dev
-    volumes:
-      - ./worker:/usr/src/app/worker
     env_file: .env
     depends_on:
       - redis
+      - sink
 
   sink:
     build:
-      context: .
+      context: ./sink
       dockerfile: Dockerfile
-    working_dir: /usr/src/app/sink
-    command: npm run dev
-    volumes:
-      - ./sink:/usr/src/app/sink
     ports:
       - "4000:4000"
     env_file: .env
+    depends_on:
+      - mongo
+      - redis
 
   mongo:
     image: mongo:6
@@ -51,6 +60,16 @@ services:
     restart: always
     ports:
       - "6379:6379"
-  
+
+  seed:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: npm run seeds
+    env_file: .env
+    depends_on:
+      - mongo
+      - redis
+
 volumes:
   mongo-data:
