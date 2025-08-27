@@ -58,7 +58,7 @@ const worker = new Worker(
 
     const noteId = job.data.noteId;
 
-    const idKey = getIdempotentKey(noteId, note.releaseAt.toString());
+    const idKey = getIdempotentKey(noteId, note.releaseAt.toISOString());
 
     let attemptNumber = note.attempts?.length || 0;
 
