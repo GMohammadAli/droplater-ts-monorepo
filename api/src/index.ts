@@ -53,3 +53,5 @@ app.use("/api/notes", notesRouter);
 app.listen(PORT, () => {
   logger.info(`API running on port ${PORT}`);
 });
+
+export default app;
