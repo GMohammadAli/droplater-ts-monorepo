@@ -119,6 +119,6 @@ Pagination was not working as expected due to incorrect path for total pages in 
 
 ---
 
-## Screen Cast
+## YouTube Video
 
 [Watch the demo here](https://youtu.be/efLmC4zcOuo)
