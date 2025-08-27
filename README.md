@@ -121,4 +121,4 @@ Pagination was not working as expected due to incorrect path for total pages in 
 
 ## Screen Cast
 
-![Note Delivery Service Demo Screen Cast](./resources/Demo-Screen-Cast.mp4)
+[Watch the demo here](https://youtu.be/efLmC4zcOuo)
