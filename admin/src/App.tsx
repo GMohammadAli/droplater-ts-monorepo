@@ -173,7 +173,7 @@ export default function App() {
     data: notes,
     columns,
     state: {
-      pagination: { pageIndex, pageSize: DEFAULT_PAGE_SIZE }, // pageSize fixed if needed
+      pagination: { pageIndex, pageSize: DEFAULT_PAGE_SIZE }, // pageSize fixed
     },
     pageCount: totalPages,
     manualPagination: true,
@@ -228,7 +228,7 @@ export default function App() {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => {
+            {table.getRowModel().rows.length > 0 ? table.getRowModel().rows.map((row) => {
               const note = row.original;
               const isDelivered = note.status === "delivered";
               return (
@@ -257,8 +257,12 @@ export default function App() {
                   ))}
                 </motion.tr>
               );
-            })}
-            <tbody className="table-footer">
+            }): <tr className="no-data"><td colSpan={columns.length}>No Notes Found</td></tr>}
+          </tbody>
+        </table>
+        
+          
+            <div className="table-footer">
               <div className="pagination-wrapper">
                 <button
                   onClick={() => table.setPageIndex(0)}
@@ -290,9 +294,7 @@ export default function App() {
                 Page {table.getState().pagination.pageIndex + 1} of{" "}
                 {table.getPageCount()}
               </div>
-            </tbody>
-          </tbody>
-        </table>
+            </div>
       </div>
     </div>
   );

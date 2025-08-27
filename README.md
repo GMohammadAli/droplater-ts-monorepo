@@ -115,6 +115,10 @@ Pagination was not working as expected due to incorrect path for total pages in 
 
 ## System Diagram
 
-![Note Delivery Service System Architecture](./admin/public/Note-Delivery-Service-System-Architecture.jpeg)
+![Note Delivery Service System Architecture](./resources/Note-Delivery-Service-System-Architecture.jpeg)
 
 ---
+
+## Screen Cast
+
+![Note Delivery Service Demo Screen Cast](./resources/Demo-Screen-Cast.mp4)
